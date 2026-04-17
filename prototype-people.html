@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>People Constellation — Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #f5f1ea;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1.5rem;
+    }
+    .label {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #c8502e;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-family: "Fraunces", serif;
+      font-weight: 400;
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+    .subtitle {
+      color: #4a4a4a;
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+      max-width: 55ch;
+      text-align: center;
+      line-height: 1.6;
+    }
+    .canvas {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 600px;
+      border: 1px solid rgba(26, 26, 26, 0.12);
+      border-radius: 4px;
+    }
+    svg { width: 100%; height: 100%; display: block; cursor: grab; user-select: none; }
+    svg.dragging { cursor: grabbing; }
+    .node circle { transition: stroke-width 0.2s, r 0.2s; }
+    .node:hover circle { stroke-width: 3; }
+    .node.center circle { fill: #1a1a1a; stroke: #1a1a1a; }
+    .node:not(.center) circle {
+      fill: #ece5d8;
+      stroke: #c8502e;
+      stroke-width: 2;
+    }
+    .node text {
+      font-family: "Fraunces", serif;
+      font-size: 15px;
+      text-anchor: middle;
+      pointer-events: none;
+      dominant-baseline: central;
+      fill: #1a1a1a;
+    }
+    .node.center text {
+      fill: #f5f1ea;
+      font-style: italic;
+      font-size: 18px;
+    }
+    .link {
+      stroke: #c8502e;
+      stroke-opacity: 0.3;
+      stroke-width: 1.25;
+      fill: none;
+    }
+    .tooltip {
+      position: absolute;
+      background: #1a1a1a;
+      color: #f5f1ea;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      width: 280px;
+      line-height: 1.55;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 10;
+      box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+    .tooltip.visible { opacity: 1; transform: translateY(0); }
+    .tooltip-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background-size: cover;
+      background-position: center;
+      background-color: #2a2a2a;
+    }
+    .tooltip-body { padding: 0.9rem 1.1rem 1.1rem; }
+    .tooltip strong {
+      display: block;
+      font-family: "Fraunces", serif;
+      font-size: 1.1rem;
+      color: #f5f1ea;
+      font-weight: 500;
+      margin-bottom: 0.15rem;
+    }
+    .tooltip em {
+      display: block;
+      font-style: normal;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #e69576;
+      margin-bottom: 0.65rem;
+    }
+    .tooltip p { margin: 0; }
+    .hint {
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      color: #4a4a4a;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+  <p class="label">04 &middot; People</p>
+  <h1>The people who shaped the journey.</h1>
+  <p class="subtitle">Each node is someone whose presence changed something about this year. Drag them around. Hover to hear what they taught me.</p>
+  <div class="canvas">
+    <svg id="svg" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid meet">
+      <g id="links"></g>
+      <g id="nodes"></g>
+    </svg>
+    <div class="tooltip" id="tooltip"></div>
+  </div>
+  <p class="hint">Prototype · drag to move · hover to reveal</p>
+
+  <script>
+    const W = 900, H = 600;
+    const center = {
+      id: "me",
+      label: "Atharv",
+      radius: 54,
+      isCenter: true,
+      x: W / 2, y: H / 2,
+      vx: 0, vy: 0,
+      fx: W / 2, fy: H / 2,
+    };
+    const people = [
+      { id: "p1", label: "Jordan", role: "My supervisor", contribution: "Challenged me to speak up in rooms where I felt out of place.", image: "https://i.pravatar.cc/320?img=12" },
+      { id: "p2", label: "Maya", role: "Co-intern", contribution: "Made the hard weeks feel shared. Taught me collaboration isn't a transaction.", image: "https://i.pravatar.cc/320?img=47" },
+      { id: "p3", label: "Devon", role: "Peer leader, LEAD cohort", contribution: "Showed me leadership looks like listening, not broadcasting.", image: "https://i.pravatar.cc/320?img=33" },
+      { id: "p4", label: "Priya", role: "Upperclassman mentor", contribution: "Reminded me reflection is a skill, not a personality trait.", image: "https://i.pravatar.cc/320?img=45" },
+      { id: "p5", label: "Sam", role: "Workshop participant", contribution: "Asked a question I couldn't answer. I'm still thinking about it.", image: "https://i.pravatar.cc/320?img=68" },
+    ];
+    people.forEach((p, i) => {
+      const a = (i / people.length) * Math.PI * 2 - Math.PI / 2;
+      p.x = W / 2 + Math.cos(a) * 200;
+      p.y = H / 2 + Math.sin(a) * 200;
+      p.vx = 0; p.vy = 0;
+      p.radius = 42;
+      p.fx = null; p.fy = null;
+    });
+
+    const nodes = [center, ...people];
+    const links = people.map((p) => ({ source: center, target: p }));
+
+    const svg = document.getElementById("svg");
+    const svgNS = "http://www.w3.org/2000/svg";
+    const linkGroup = document.getElementById("links");
+    const nodeGroup = document.getElementById("nodes");
+    const tooltip = document.getElementById("tooltip");
+
+    links.forEach((l) => {
+      const line = document.createElementNS(svgNS, "line");
+      line.setAttribute("class", "link");
+      l.el = line;
+      linkGroup.appendChild(line);
+    });
+
+    nodes.forEach((n) => {
+      const g = document.createElementNS(svgNS, "g");
+      g.setAttribute("class", "node" + (n.isCenter ? " center" : ""));
+      const c = document.createElementNS(svgNS, "circle");
+      c.setAttribute("r", n.radius);
+      const t = document.createElementNS(svgNS, "text");
+      t.textContent = n.label;
+      g.appendChild(c);
+      g.appendChild(t);
+      n.el = g;
+      nodeGroup.appendChild(g);
+
+      if (!n.isCenter) {
+        g.addEventListener("mouseenter", () => {
+          tooltip.innerHTML =
+            `<div class="tooltip-img" style="background-image:url('${n.image}')"></div>` +
+            `<div class="tooltip-body"><strong>${n.label}</strong><em>${n.role}</em><p>${n.contribution}</p></div>`;
+          tooltip.classList.add("visible");
+        });
+        g.addEventListener("mouseleave", () => tooltip.classList.remove("visible"));
+        g.addEventListener("mousemove", (e) => {
+          const rect = svg.getBoundingClientRect();
+          tooltip.style.left = e.clientX - rect.left + 14 + "px";
+          tooltip.style.top = e.clientY - rect.top + 14 + "px";
+        });
+      }
+
+      let dragging = false, dx = 0, dy = 0;
+      g.addEventListener("mousedown", (e) => {
+        dragging = true;
+        svg.classList.add("dragging");
+        const pt = toSVG(e);
+        dx = n.x - pt.x;
+        dy = n.y - pt.y;
+        n.fx = n.x; n.fy = n.y;
+        e.preventDefault();
+      });
+      window.addEventListener("mousemove", (e) => {
+        if (!dragging) return;
+        const pt = toSVG(e);
+        n.fx = pt.x + dx;
+        n.fy = pt.y + dy;
+      });
+      window.addEventListener("mouseup", () => {
+        if (!dragging) return;
+        dragging = false;
+        svg.classList.remove("dragging");
+        if (!n.isCenter) { n.fx = null; n.fy = null; }
+      });
+    });
+
+    function toSVG(e) {
+      const pt = svg.createSVGPoint();
+      pt.x = e.clientX; pt.y = e.clientY;
+      return pt.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    function tick() {
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j];
+          let ddx = b.x - a.x, ddy = b.y - a.y;
+          let d = Math.sqrt(ddx * ddx + ddy * ddy) || 1;
+          const force = 4000 / (d * d);
+          const fx = (ddx / d) * force;
+          const fy = (ddy / d) * force;
+          if (!a.isCenter) { a.vx -= fx; a.vy -= fy; }
+          if (!b.isCenter) { b.vx += fx; b.vy += fy; }
+        }
+      }
+      links.forEach((l) => {
+        const a = l.source, b = l.target;
+        const ddx = b.x - a.x, ddy = b.y - a.y;
+        const d = Math.sqrt(ddx * ddx + ddy * ddy) || 1;
+        const target = 220;
+        const k = 0.015;
+        const fx = ((d - target) * k) * (ddx / d);
+        const fy = ((d - target) * k) * (ddy / d);
+        if (!a.isCenter) { a.vx += fx; a.vy += fy; }
+        if (!b.isCenter) { b.vx -= fx; b.vy -= fy; }
+      });
+      nodes.forEach((n) => {
+        if (n.isCenter) return;
+        n.vx += (W / 2 - n.x) * 0.0018;
+        n.vy += (H / 2 - n.y) * 0.0018;
+      });
+      nodes.forEach((n) => {
+        if (n.fx != null) { n.x = n.fx; n.vx = 0; }
+        else { n.vx *= 0.85; n.x += n.vx; }
+        if (n.fy != null) { n.y = n.fy; n.vy = 0; }
+        else { n.vy *= 0.85; n.y += n.vy; }
+        n.x = Math.max(n.radius, Math.min(W - n.radius, n.x));
+        n.y = Math.max(n.radius, Math.min(H - n.radius, n.y));
+      });
+      links.forEach((l) => {
+        l.el.setAttribute("x1", l.source.x);
+        l.el.setAttribute("y1", l.source.y);
+        l.el.setAttribute("x2", l.target.x);
+        l.el.setAttribute("y2", l.target.y);
+      });
+      nodes.forEach((n) => {
+        n.el.setAttribute("transform", `translate(${n.x}, ${n.y})`);
+      });
+      requestAnimationFrame(tick);
+    }
+    tick();
+  </script>
+</body>
+</html>

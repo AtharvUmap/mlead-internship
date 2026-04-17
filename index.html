@@ -11,9 +11,19 @@
   <link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
+  <div class="backdrop" aria-hidden="true">
+    <svg class="backdrop__spiral backdrop__spiral--tl" viewBox="-100 -100 200 200">
+      <path d="M 0 0 a 5 5 0 1 1 10 0 a 10 10 0 1 1 -20 0 a 15 15 0 1 1 30 0 a 20 20 0 1 1 -40 0 a 25 25 0 1 1 50 0 a 30 30 0 1 1 -60 0 a 35 35 0 1 1 70 0 a 40 40 0 1 1 -80 0" />
+    </svg>
+    <svg class="backdrop__spiral backdrop__spiral--br" viewBox="-100 -100 200 200">
+      <path d="M 0 0 a 5 5 0 1 1 10 0 a 10 10 0 1 1 -20 0 a 15 15 0 1 1 30 0 a 20 20 0 1 1 -40 0 a 25 25 0 1 1 50 0 a 30 30 0 1 1 -60 0 a 35 35 0 1 1 70 0 a 40 40 0 1 1 -80 0" />
+    </svg>
+  </div>
+
   <nav class="nav">
     <a href="#top" class="nav__brand">LCSL / Showcase</a>
     <ul class="nav__links">
+      <li><a href="#journey">Journey</a></li>
       <li><a href="#metaphor">Metaphor</a></li>
       <li><a href="#meaning">Meaning</a></li>
       <li><a href="#moments">Moments</a></li>
@@ -41,9 +51,63 @@
   </header>
 
   <main>
-    <!-- Section 1: Metaphor -->
+    <!-- Section 1: Journey -->
+    <section id="journey" class="section section--journey" data-reveal>
+      <p class="section__label">01 &middot; Journey</p>
+      <h2 class="section__title section__title--wide">How I got here.</h2>
+      <ol class="timeline">
+        <li class="timeline__stop">
+          <div class="timeline__marker"></div>
+          <p class="timeline__date">Spring 2025</p>
+          <h3 class="timeline__role">Participant</h3>
+          <p class="timeline__body">[A sentence on what this stage was — who you were, what you expected.]</p>
+        </li>
+        <li class="timeline__stop">
+          <div class="timeline__marker"></div>
+          <p class="timeline__date">Fall 2025</p>
+          <h3 class="timeline__role">Facilitator</h3>
+          <p class="timeline__body">[A sentence on what shifted when you started leading.]</p>
+        </li>
+        <li class="timeline__stop timeline__stop--current">
+          <div class="timeline__marker"></div>
+          <p class="timeline__date">Spring 2026</p>
+          <h3 class="timeline__role">Intern</h3>
+          <p class="timeline__body">[A sentence on where you are now, and what this chapter has asked of you.]</p>
+        </li>
+      </ol>
+
+      <div class="reflections">
+        <div class="reflections__viewport">
+          <div class="reflections__track" id="reflections-track">
+            <div class="reflection">
+              <p class="reflection__q">What did you hope to learn and gain from this internship?</p>
+              <p class="reflection__a">[Your response.]</p>
+            </div>
+            <div class="reflection">
+              <p class="reflection__q">How did your hopes and goals change over the year?</p>
+              <p class="reflection__a">[Your response.]</p>
+            </div>
+            <div class="reflection">
+              <p class="reflection__q">How does what you have learned in this role connect to what you hope to do in the future?</p>
+              <p class="reflection__a">[Your response.]</p>
+            </div>
+          </div>
+        </div>
+        <div class="reflections__nav">
+          <button class="reflections__arrow" id="refl-prev" aria-label="Previous question">&larr;</button>
+          <div class="reflections__dots" id="refl-dots">
+            <span class="reflections__dot is-active"></span>
+            <span class="reflections__dot"></span>
+            <span class="reflections__dot"></span>
+          </div>
+          <button class="reflections__arrow" id="refl-next" aria-label="Next question">&rarr;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Metaphor -->
     <section id="metaphor" class="section section--metaphor" data-reveal>
-      <p class="section__label">01 &middot; Metaphor</p>
+      <p class="section__label">02 &middot; Metaphor</p>
       <h2 class="section__title">My internship has been like…</h2>
       <blockquote class="pullquote">
         <p>[Your metaphor here — a few sentences painting the picture.]</p>
@@ -56,7 +120,7 @@
     <!-- Section 2: What the role means -->
     <section id="meaning" class="section section--split" data-reveal>
       <div class="section__col">
-        <p class="section__label">02 &middot; Meaning</p>
+        <p class="section__label">03 &middot; Meaning</p>
         <h2 class="section__title">What this role means to me.</h2>
       </div>
       <div class="section__col">
@@ -71,53 +135,70 @@
 
     <!-- Section 3: Defining moments -->
     <section id="moments" class="section section--moments" data-reveal>
-      <p class="section__label">03 &middot; Defining Moments</p>
+      <p class="section__label">04 &middot; Defining Moments</p>
       <h2 class="section__title">Moments that shaped the year.</h2>
       <ol class="moments">
         <li class="moment">
-          <p class="moment__date">[Month, Year]</p>
-          <h3 class="moment__title">[Short title]</h3>
-          <p class="moment__body">[What happened, what you felt, what it taught you.]</p>
+          <div class="moment__content">
+            <p class="moment__date">[Month, Year]</p>
+            <h3 class="moment__title">[Short title]</h3>
+            <p class="moment__body">[What happened, what you felt, what it taught you.]</p>
+          </div>
+          <div class="moment__image" style="background-image: url('./assets/images/moments/moment-1.jpg')" role="img" aria-label="[Describe the moment image]"></div>
         </li>
         <li class="moment">
-          <p class="moment__date">[Month, Year]</p>
-          <h3 class="moment__title">[Short title]</h3>
-          <p class="moment__body">[What happened, what you felt, what it taught you.]</p>
+          <div class="moment__content">
+            <p class="moment__date">[Month, Year]</p>
+            <h3 class="moment__title">[Short title]</h3>
+            <p class="moment__body">[What happened, what you felt, what it taught you.]</p>
+          </div>
+          <div class="moment__image" style="background-image: url('./assets/images/moments/moment-2.jpg')" role="img" aria-label="[Describe the moment image]"></div>
         </li>
         <li class="moment">
-          <p class="moment__date">[Month, Year]</p>
-          <h3 class="moment__title">[Short title]</h3>
-          <p class="moment__body">[What happened, what you felt, what it taught you.]</p>
+          <div class="moment__content">
+            <p class="moment__date">[Month, Year]</p>
+            <h3 class="moment__title">[Short title]</h3>
+            <p class="moment__body">[What happened, what you felt, what it taught you.]</p>
+          </div>
+          <div class="moment__image" style="background-image: url('./assets/images/moments/moment-3.jpg')" role="img" aria-label="[Describe the moment image]"></div>
         </li>
       </ol>
+
+      <div class="gallery">
+        <p class="gallery__label">More from the year</p>
+        <div class="gallery__scroll" id="gallery-scroll">
+          <figure class="gallery__item" style="background-image: url('./assets/images/gallery/1.jpg')" aria-label="[caption]"></figure>
+          <figure class="gallery__item" style="background-image: url('./assets/images/gallery/2.jpg')" aria-label="[caption]"></figure>
+          <figure class="gallery__item" style="background-image: url('./assets/images/gallery/3.jpg')" aria-label="[caption]"></figure>
+          <figure class="gallery__item" style="background-image: url('./assets/images/gallery/4.jpg')" aria-label="[caption]"></figure>
+          <figure class="gallery__item" style="background-image: url('./assets/images/gallery/5.jpg')" aria-label="[caption]"></figure>
+          <figure class="gallery__item" style="background-image: url('./assets/images/gallery/6.jpg')" aria-label="[caption]"></figure>
+        </div>
+        <div class="gallery__nav">
+          <button class="gallery__arrow" id="gal-prev" aria-label="Scroll left">&larr;</button>
+          <button class="gallery__arrow" id="gal-next" aria-label="Scroll right">&rarr;</button>
+        </div>
+      </div>
     </section>
 
     <!-- Section 4: People -->
     <section id="people" class="section section--people" data-reveal>
-      <p class="section__label">04 &middot; People</p>
-      <h2 class="section__title">The people who shaped the journey.</h2>
-      <div class="people">
-        <article class="person">
-          <h3 class="person__name">[Name]</h3>
-          <p class="person__role">[Their role / relationship]</p>
-          <p class="person__body">[What they taught you, in a few sentences.]</p>
-        </article>
-        <article class="person">
-          <h3 class="person__name">[Name]</h3>
-          <p class="person__role">[Their role / relationship]</p>
-          <p class="person__body">[What they taught you, in a few sentences.]</p>
-        </article>
-        <article class="person">
-          <h3 class="person__name">[Name]</h3>
-          <p class="person__role">[Their role / relationship]</p>
-          <p class="person__body">[What they taught you, in a few sentences.]</p>
-        </article>
+      <p class="section__label">05 &middot; People</p>
+      <h2 class="section__title section__title--wide">The people who shaped the journey.</h2>
+      <p class="constellation__subtitle">Each node is someone whose presence changed something this year. Drag to move them, hover to hear what they taught me.</p>
+      <div class="constellation">
+        <svg id="constellation-svg" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid meet" aria-label="Interactive constellation of people who shaped my internship year">
+          <g id="constellation-links"></g>
+          <g id="constellation-nodes"></g>
+        </svg>
+        <div class="constellation__tooltip" id="constellation-tooltip" role="tooltip"></div>
       </div>
+      <p class="constellation__hint">drag &middot; hover</p>
     </section>
 
     <!-- Section 5: Used to think / now think -->
     <section id="shift" class="section section--shift" data-reveal>
-      <p class="section__label">05 &middot; The Shift</p>
+      <p class="section__label">06 &middot; The Shift</p>
       <h2 class="section__title">Then &rarr; Now</h2>
       <div class="shift">
         <div class="shift__card shift__card--before">
@@ -134,7 +215,7 @@
 
     <!-- Section 6: Future -->
     <section id="future" class="section section--future" data-reveal>
-      <p class="section__label">06 &middot; Future</p>
+      <p class="section__label">07 &middot; Future</p>
       <h2 class="section__title">Where this takes me next.</h2>
       <p class="section__body">
         [How does what you learned here connect to your professional and personal goals beyond the internship?]
