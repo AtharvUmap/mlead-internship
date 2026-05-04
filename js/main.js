@@ -52,20 +52,6 @@ document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el))
   update();
 })();
 
-/* Gallery scroller */
-(function () {
-  const scroller = document.getElementById("gallery-scroll");
-  const prev = document.getElementById("gal-prev");
-  const next = document.getElementById("gal-next");
-  if (!scroller || !prev || !next) return;
-  function step() {
-    const item = scroller.querySelector(".gallery__item");
-    return item ? item.offsetWidth + 16 : 300;
-  }
-  prev.addEventListener("click", () => scroller.scrollBy({ left: -step(), behavior: "smooth" }));
-  next.addEventListener("click", () => scroller.scrollBy({ left: step(), behavior: "smooth" }));
-})();
-
 /* People constellation */
 (function () {
   const svg = document.getElementById("constellation-svg");
