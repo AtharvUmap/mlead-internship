@@ -88,10 +88,10 @@ document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el))
   };
 
   const people = [
-    { id: "p1", label: "Myles", name: "Myles Alexander", role: "Coordinator, Leadership Development, Supervisor", contribution: "Challenged me to speak up in rooms where I felt out of place.", image: "https://i.pravatar.cc/320?img=12" },
-    { id: "p2", label: "Marcelle", role: "Co-intern, Communications and Marketing", contribution: "[What they taught you, in a sentence.]", image: "https://i.pravatar.cc/320?img=47" },
-    { id: "p3", label: "Eghosa", role: "Co-intern, Logistics and Management", contribution: "[What they taught you, in a sentence.]", image: "https://i.pravatar.cc/320?img=33" },
-    { id: "p4", label: "Jaylin", role: "Co-intern, Logistics and Management", contribution: "[What they taught you, in a sentence.]", image: "https://i.pravatar.cc/320?img=45" },
+    { id: "p1", label: "Myles", name: "Myles Alexander", role: "Coordinator, Leadership Development, Supervisor", image: "./assets/images/people/myles.jpg" },
+    { id: "p2", label: "Marcelle", role: "Co-intern, Communications and Marketing", image: "./assets/images/people/marcelle.jpg", bgPos: "top" },
+    { id: "p3", label: "Eghosa", role: "Co-intern, Logistics and Management", image: "./assets/images/people/eghosa.jpg" },
+    { id: "p4", label: "Jaylin", role: "Co-intern, Logistics and Management", image: "./assets/images/people/jaylin.jpg", bgPos: "top" },
   ];
 
   people.forEach((p, i) => {
@@ -128,8 +128,8 @@ document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el))
     if (!n.isCenter) {
       g.addEventListener("mouseenter", () => {
         tooltip.innerHTML =
-          `<div class="constellation__tooltip-img" style="background-image:url('${n.image}')"></div>` +
-          `<div class="constellation__tooltip-body"><strong>${n.name || n.label}</strong><em>${n.role}</em><p>${n.contribution}</p></div>`;
+          `<div class="constellation__tooltip-img" style="background-image:url('${n.image}'); background-position:${n.bgPos || "center"}"></div>` +
+          `<div class="constellation__tooltip-body"><strong>${n.name || n.label}</strong><em>${n.role}</em></div>`;
         tooltip.classList.add("is-visible");
       });
       g.addEventListener("mouseleave", () => tooltip.classList.remove("is-visible"));

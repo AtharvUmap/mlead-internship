@@ -235,11 +235,12 @@ a { color: inherit; text-decoration: none; }
   border-left: 3px solid var(--accent);
   font-family: var(--serif);
   font-style: italic;
-  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-size: clamp(1.75rem, 3.75vw, 2.6rem);
   line-height: 1.35;
   max-width: 28ch;
 }
 .pullquote p { margin: 0; }
+.section--metaphor .section__body { max-width: none; }
 
 /* Moments */
 .moments {
@@ -703,22 +704,84 @@ a { color: inherit; text-decoration: none; }
   .shift__arrow { transform: rotate(90deg); justify-self: center; }
 }
 
+/* Future split */
+.future-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+  margin-top: 2.5rem;
+}
+.future-col__title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  line-height: 1.2;
+  margin: 0 0 1rem;
+}
+@media (max-width: 800px) { .future-grid { grid-template-columns: 1fr; } }
+
 /* Closing */
 .section--close {
   text-align: center;
-  padding: 8rem var(--gutter);
+  padding: 6rem var(--gutter);
   border-top: 1px solid var(--rule);
 }
-.closing {
-  font-family: var(--serif);
-  font-size: clamp(3rem, 7vw, 5rem);
-  font-style: italic;
-  margin: 0 0 1rem;
+.polaroids {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1.25rem, 2.5vw, 2.25rem);
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 0;
 }
-.closing__sub {
-  color: var(--ink-soft);
-  letter-spacing: 0.1em;
+.polaroid {
+  background: #fdfbf6;
+  padding: 14px 14px 12px;
+  box-shadow: 0 10px 28px -10px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.08);
+  transform: rotate(var(--r, 0));
+  transition: transform 0.35s ease, box-shadow 0.35s ease, z-index 0s;
   margin: 0;
+  width: 220px;
+  position: relative;
+  z-index: 1;
+}
+.polaroid:hover {
+  transform: rotate(0) scale(1.06);
+  box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.35), 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 3;
+}
+.polaroid__photo {
+  width: 100%;
+  aspect-ratio: 1;
+  background-size: cover;
+  background-position: center;
+  background-color: #e6ddcf;
+}
+.polaroid figcaption {
+  font-family: "Caveat", "Fraunces", cursive;
+  font-weight: 600;
+  font-size: 1.35rem;
+  text-align: center;
+  margin-top: 10px;
+  color: var(--ink);
+  line-height: 1;
+}
+.polaroid--note .polaroid__note {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Caveat", cursive;
+  font-weight: 600;
+  font-size: 2.4rem;
+  color: var(--accent);
+  text-align: center;
+  line-height: 1.1;
+  padding: 1rem;
 }
 
 /* Footer */
